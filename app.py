@@ -382,10 +382,11 @@ with col1:
         placeholder="e.g. SI25/26-0097",
     )
 with col2:
-    orig_invoice_date = st.text_input(
+    orig_invoice_date_val = st.date_input(
         "Invoice Date",
-        placeholder="YYYY-MM-DD",
+        value=date.today(),
     )
+    orig_invoice_date = orig_invoice_date_val.strftime("%Y-%m-%d")
 
 # ── Convert ───────────────────────────────────────────────────────────────────
 if uploaded:
