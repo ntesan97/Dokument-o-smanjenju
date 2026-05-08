@@ -123,7 +123,7 @@ def build_credit_note_xml(xlsx_path: str, orig_invoice_no: str, orig_invoice_dat
 
     # Header fields
     doc_no     = _str(gen.get("No.", ""))
-    issue_date = _fmt_date(gen.get("Document Date"))
+    issue_date = date.today().strftime("%Y-%m-%d")  # always today per schema requirement
     vat_date   = _fmt_date(gen.get("VAT Date", gen.get("Posting Date")))
     ext_doc_no = _str(gen.get("External Document No.", ""))
 
