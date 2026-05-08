@@ -11,15 +11,15 @@ from lxml import etree
 # SELLER DETAILS — fill in your company's permanent data here
 # =============================================================================
 SELLER = {
-    "pib":          "SELLER_PIB",            # 9-digit PIB
-    "name":         "Naziv prodavca d.o.o.",
-    "street":       "Ulica i broj",
-    "city":         "Grad",
-    "post_code":    "00000",
+    "pib":          "110014338",
+    "name":         "SERVIER doo",
+    "street":       "Milutina Milankovića 11a",
+    "city":         "Novi Beograd",
+    "post_code":    "11070",
     "country":      "RS",
-    "mb":           "SELLER_MB",             # 8-digit matični broj
-    "email":        "fakture@seller.rs",
-    "bank_account": "XXX-XXXXXXXXXXXXXXXX-XX",
+    "mb":           "21285293",
+    "email":        "fakture@servier.rs",
+    "bank_account": "325-950050031087-338",
 }
 
 # =============================================================================
