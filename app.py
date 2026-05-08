@@ -115,10 +115,12 @@ def build_credit_note_xml(xlsx_path: str, orig_invoice_no: str, orig_invoice_dat
     lines_df= pd.read_excel(xl, sheet_name="Edit - Posted Sales Credit Mem",  header=None)
     tot_df  = pd.read_excel(xl, sheet_name="Edit - Posted Sales Credit Mem1", header=None)
     inv2_df = pd.read_excel(xl, sheet_name="Invoicing",                        header=None)
+    reg_df  = pd.read_excel(xl, sheet_name="Registration Numbers",             header=None)
 
     gen   = _read_kv(gen_df)
     tot   = _read_kv(tot_df)
     inv2  = _read_kv(inv2_df)
+    reg   = _read_kv(reg_df)
     lines = _read_lines(lines_df)
 
     # Header fields
@@ -128,7 +130,9 @@ def build_credit_note_xml(xlsx_path: str, orig_invoice_no: str, orig_invoice_dat
     ext_doc_no = _str(gen.get("External Document No.", ""))
 
     buyer_name   = _str(gen.get("Sell-to Customer Name",  inv2.get("Bill-to Name", "")))
-    buyer_pib    = _str(gen.get("Sell-to Customer No.",   inv2.get("Bill-to Customer No.", "")))
+    # Use real PIB from Registration Numbers sheet, not internal BC customer code
+    buyer_pib    = str(int(float(reg.get("VAT Registration No.", 0) or 0)))
+    buyer_mb     = str(int(float(reg.get("Registration No.", 0) or 0)))
     buyer_street = _str(gen.get("Sell-to Address",        inv2.get("Bill-to Address", "")))
     buyer_city   = _str(gen.get("Sell-to City",           inv2.get("Bill-to City", "")))
     buyer_zip    = _str(gen.get("Sell-to Post Code",      inv2.get("Bill-to Post Code", "")))
@@ -209,7 +213,9 @@ def build_credit_note_xml(xlsx_path: str, orig_invoice_no: str, orig_invoice_dat
     cpts = _sub(cust_party, "cac:PartyTaxScheme")
     _add(cpts, "cbc:CompanyID", f"RS{buyer_pib}")
     _add(_sub(cpts, "cac:TaxScheme"), "cbc:ID", "VAT")
-    _add(_sub(cust_party, "cac:PartyLegalEntity"), "cbc:RegistrationName", buyer_name)
+    cust_ple = _sub(cust_party, "cac:PartyLegalEntity")
+    _add(cust_ple, "cbc:RegistrationName", buyer_name)
+    _add(cust_ple, "cbc:CompanyID", buyer_mb)
 
     # Delivery & payment
     _add(_sub(root, "cac:Delivery"), "cbc:ActualDeliveryDate", vat_date)
@@ -373,12 +379,12 @@ uploaded = st.file_uploader(
 )
 
 # ── Original invoice reference (required by schema) ───────────────────────────
-st.markdown('<div class="section-label">Original Invoice Reference</div>', unsafe_allow_html=True)
+st.markdown('<div class="section-label">Original Invoice Reference (faktura na koju se odnosi ovo knjižno odobrenje)</div>', unsafe_allow_html=True)
 
 col1, col2 = st.columns([3, 2])
 with col1:
     orig_invoice_no = st.text_input(
-        "Invoice Number",
+        "Broj originalne fakture (npr. SI25/26-0097)",
         placeholder="e.g. SI25/26-0097",
     )
 with col2:
