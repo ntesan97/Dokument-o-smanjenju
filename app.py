@@ -182,6 +182,7 @@ def build_credit_note_xml(xlsx_path: str, orig_invoice_no: str, orig_invoice_dat
     _add(idr, "cbc:ID", orig_invoice_no)
     if orig_invoice_date:
         _add(idr, "cbc:IssueDate", orig_invoice_date)
+    _add(idr, "cbc:DocumentTypeCode", "380")
 
     # Supplier
     sup_party = _sub(_sub(root, "cac:AccountingSupplierParty"), "cac:Party")
