@@ -131,8 +131,8 @@ def build_credit_note_xml(xlsx_path: str, orig_invoice_no: str, orig_invoice_dat
 
     buyer_name   = _str(gen.get("Sell-to Customer Name",  inv2.get("Bill-to Name", "")))
     # Use real PIB from Registration Numbers sheet, not internal BC customer code
-    buyer_pib    = str(int(float(reg.get("VAT Registration No.", 0) or 0)))
-    buyer_mb     = str(int(float(reg.get("Registration No.", 0) or 0)))
+    buyer_pib    = str(int(float(reg.get("VAT Registration No.", 0) or 0))).zfill(9)
+    buyer_mb     = str(int(float(reg.get("Registration No.", 0) or 0))).zfill(8)
     buyer_street = _str(gen.get("Sell-to Address",        inv2.get("Bill-to Address", "")))
     buyer_city   = _str(gen.get("Sell-to City",           inv2.get("Bill-to City", "")))
     buyer_zip    = _str(gen.get("Sell-to Post Code",      inv2.get("Bill-to Post Code", "")))
